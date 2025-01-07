@@ -226,3 +226,69 @@ class Solution:
 
         if res >= float('inf') : return -1
         return res
+
+#Bulls and Cows
+class Solution:
+    def getHint(self, secret: str, guess: str) -> str:
+        sec = Counter(secret)
+        a = 0
+        b = 0
+        guess = list(guess)
+        for i in range(len(guess)) : 
+            if guess[i] == secret[i] : 
+                a += 1
+                sec[secret[i]] -= 1
+                guess[i] = 'a'
+        for i in range(len(guess)) :
+            if sec[guess[i]] > 0 : 
+                b += 1
+                sec[guess[i]] -= 1
+        return str(a) + "A" + str(b) + 'B'                
+
+#Random Point in Non-overlapping Rectangles
+class Solution:
+    def __init__(self, rects: List[List[int]]):
+        self.x = [0]*len(rects)
+        self.y = [0]*len(rects)
+        self.weights = [0]*len(rects)
+        self.tw = 0
+        self.c = list(range(len(self.x)))
+        # self.numx, self.numy = 0, 0
+        for i in range(len(rects)) :
+            self.x[i] = [min(rects[i][0], rects[i][2]), max(rects[i][0], rects[i][2])]
+            self.y[i] = [min(rects[i][1], rects[i][3]), max(rects[i][1], rects[i][3])]
+            self.weights[i] = (self.x[i][1] - self.x[i][0]+1) * (self.y[i][1] - self.y[i][0]+1) 
+            self.tw += self.weights[i]
+        # print(self.x, self.y, self.numx, self.numy)
+
+    def pick(self) -> List[int]:
+        i = random.choices(self.c, weights = self.weights, k=1)[0]
+        u = random.randint(self.x[i][0], self.x[i][1])
+        v = random.randint(self.y[i][0], self.y[i][1])
+        return [u, v]
+
+#City with Smallest Number of Threshold Distance
+class Solution:
+    def findTheCity(self, n: int, edges: List[List[int]], thres: int) -> int:
+        graph = [[float('inf')]*n for i in range(n)]
+        for [i, j, d] in edges :
+            graph[i][j] = d
+            graph[j][i] = d
+        for k in range(n) :
+            graph[k][k] = 0
+            for i in range(n) :
+                for j in range(n) :
+                    #  min(
+                    if graph[i][j] > graph[i][k] + graph[k][j] : graph[i][j] = graph[i][k] + graph[k][j]
+        res = math.inf
+        ans = 0
+        # print(graph)
+        for i in range(n) :
+            curr = 0
+            for j in range(n) : 
+                if graph[i][j] <= thres : curr += 1
+            if res >= curr : 
+                res = curr 
+                ans = i
+            # print(curr)
+        return ans
