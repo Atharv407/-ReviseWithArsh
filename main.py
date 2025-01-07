@@ -292,3 +292,28 @@ class Solution:
                 ans = i
             # print(curr)
         return ans
+    
+#Overlap Circle and Rectangle
+class Solution:
+    def checkOverlap(self, radius: int, xc: int, yc: int, x1: int, y1: int, x2: int, y2: int) -> bool:
+        # print(x1, x2, y1, y2)
+        if xc > x1 and xc < x2 and yc > y1 and yc < y2 : 
+            return True
+        
+        xr = x1
+        if abs(x2 - xc) < abs(x1 - xc) : xr = x2
+        if yc <= y2 and yc >= y1 and abs(xc - xr) <= radius : 
+            return True
+        
+        yr = y1
+        if abs(y2 - yc) < abs(y1 - yc) : yr = y2
+        if xc <= x2 and xc >= x1 and abs(yc - yr) <= radius : 
+            return True
+
+        dist = (xr-xc)**2 + (yr - yc)**2 
+        if dist < radius**2 : 
+            return True
+
+        # print(xr, yr)
+        return False
+        
