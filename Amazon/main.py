@@ -66,8 +66,6 @@ class Solution:
         return res
                 
 #Delete N nodes after M nodes of a linked list
-# your task is to complete this Function
-# Function shouldn't return anything
 
 '''
 class Node:
@@ -138,4 +136,117 @@ if __name__ == '__main__':
         t -= 1
         print("~")  # Separator for test cases
 
-# } Driver Code Ends
+#Maximum of all Subarrays of Size k
+#User function Template for python3
+import heapq
+from collections import Counter
+class Solution:
+    #Function to find maximum of each subarray of size k.
+    def maxOfSubarrays(self, arr, k):
+        i = 0
+        j = i + k
+        q = [-i for i in arr[i:j]]
+        heapq.heapify(q)
+        res = [-q[0]]
+        sa = Counter(q)
+        for i in range(1, len(arr)-k+1) :
+            # print(sa, q)
+            heapq.heappush(q,-arr[i+k-1])
+            sa[-arr[i-1]] -= 1
+            sa[-arr[i+k-1]] += 1
+            while sa[q[0]] <= 0 :
+                heapq.heappop(q)
+                # if len(q) == 0 : return res
+            res.append(-q[0])
+        return res
+            
+            
+
+
+#{ 
+ # Driver Code Starts
+#Initial Template for Python 3
+
+import atexit
+import io
+import sys
+from collections import deque
+
+#Contributed by : Nagendra Jha
+
+_INPUT_LINES = sys.stdin.read().splitlines()
+input = iter(_INPUT_LINES).__next__
+_OUTPUT_BUFFER = io.StringIO()
+sys.stdout = _OUTPUT_BUFFER
+
+
+@atexit.register
+def write():
+    sys.__stdout__.write(_OUTPUT_BUFFER.getvalue())
+
+
+if __name__ == '__main__':
+    test_cases = int(input())
+    for cases in range(test_cases):
+        arr = list(map(int, input().strip().split()))
+        k = int(input())
+        ob = Solution()
+        res = ob.maxOfSubarrays(arr, k)
+        for i in range(len(res)):
+            print(res[i], end=" ")
+        print()
+        print("~")
+
+#Which among them forms a perfect sudoku pattern
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        cols = [set() for i in range(9)]
+        row = set()
+        sb = [set() for i in range(3)]
+        for i in range(9) :
+            row = set()
+            if i %3 == 0 : sb =  [set() for i in range(3)]
+            for j in range(9) :
+                if board[i][j] == '.' : continue
+                if board[i][j] in row : return False
+                row.add(board[i][j])
+                if board[i][j] in cols[j] : return False
+                cols[j].add(board[i][j])
+                ind = int(j /3)
+                if board[i][j] in sb[ind] : return False
+                sb[ind].add(board[i][j])
+        return True
+
+#Rotten Oranges 
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        fresh = 0
+        for i in grid :
+            for j in i :
+                if j == 1 : fresh += 1
+        res = 0
+        while fresh != 0 :
+            res += 1
+            pfresh = fresh
+            # print(fresh)
+            ngrid = [c[:] for c in grid]
+            for i in range(len(grid)) :
+                for j in range(len(grid[0])) :
+                    if grid[i][j] != 2 : continue
+                    if i -1 > -1 and ngrid[i-1][j] == 1 : 
+                        ngrid[i-1][j] = 2
+                        fresh -=1
+                    if i +1 < len(grid) and ngrid[i+1][j] == 1 : 
+                        ngrid[i+1][j] = 2
+                        fresh -=1
+                    if j -1 > -1 and ngrid[i][j-1] == 1 : 
+                        ngrid[i][j-1] = 2
+                        fresh -=1
+                    if j+1 < len(grid[0]) and ngrid[i][j+1] == 1 : 
+                        ngrid[i][j+1] = 2
+                        fresh -=1
+            grid = ngrid
+            if fresh == pfresh : return -1
+            
+        return res
+
