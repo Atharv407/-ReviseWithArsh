@@ -250,3 +250,89 @@ class Solution:
             
         return res
 
+#Tree Burning
+class Solution: 		
+    def amountOfTime(self, root: Optional[TreeNode], start: int) -> int:
+        graph = defaultdict(list)
+        
+        stack = [(root, None)]
+        while stack: 
+            n, p = stack.pop()
+            if p: 
+                graph[p.val].append(n.val)
+                graph[n.val].append(p.val)
+            if n.left: stack.append((n.left, n))
+            if n.right: stack.append((n.right, n))
+        
+        ans = -1
+        seen = {start}
+        queue = deque([start])
+        while queue: 
+            for _ in range(len(queue)): 
+                u = queue.popleft()
+                for v in graph[u]: 
+                    if v not in seen: 
+                        seen.add(v)
+                        queue.append(v)
+            ans += 1
+        return ans 
+
+#Calculating max profit
+class Solution:
+    def maxProfit(self, k: int, prices: List[int]) -> int :
+        buy = [-math.inf]*(k+1)
+        sell = [0]*(k+1)
+        buy[0] = -prices[0]
+        i = 1
+        # print(buy)
+        # print(sell)
+        for p in prices :
+            print(i, buy, sell)
+            for j in range(min(k, i+1)-1, -1, -1) :
+                sell[j] = max(sell[j], buy[j]+p)
+            for j in range(min(k, i+1)-1, -1, -1) :
+                buy[j] = max(buy[j], sell[j-1]-p)
+            i += 1
+        print(buy, sell)
+        return max(sell)
+
+#tree serialization and deserialization
+class Codec:
+
+    def serialize(self, root):
+        # use level order traversal to match LeetCode's serialization format
+        flat_bt = []
+        queue = collections.deque([root])
+        while queue:
+            node = queue.pop()
+            if node:
+                flat_bt.append(str(node.val))
+                queue.appendleft(node.left)
+                queue.appendleft(node.right)
+            else:
+                # you can use any char to represent null
+                # empty string means test for a non-null node is simply: flat_bt[i]
+                flat_bt.append('')
+        return ','.join(flat_bt)
+    # time:  O(n)
+    # space: O(n)
+
+    def deserialize(self, data):
+        if not data:
+            return
+        flat_bt = data.split(',')
+        ans = TreeNode(flat_bt[0])
+        queue = collections.deque([ans])
+        i = 1
+        while queue:
+            node = queue.pop()
+            if i < len(flat_bt) and flat_bt[i]:
+                node.left = TreeNode(int(flat_bt[i]))
+                queue.appendleft(node.left)
+            i += 1
+            if i < len(flat_bt) and flat_bt[i]:
+                node.right = TreeNode(int(flat_bt[i]))
+                queue.appendleft(node.right)
+            i += 1
+        return ans
+    
