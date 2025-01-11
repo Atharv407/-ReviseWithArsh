@@ -335,4 +335,151 @@ class Codec:
                 queue.appendleft(node.right)
             i += 1
         return ans
-    
+
+#Phone directory
+#User function Template for python3
+import bisect
+class Solution:
+    def displayContacts(self, n, contact, s):
+        def bl(search, l, h) : 
+            if l > h : return l
+            while l < h : 
+                m = (l+h)//2
+                ms = contact[m][:len(search)]
+                if ms < search : l = m + 1
+                elif ms > search : h = m - 1
+                else : h = m-1
+            # print('bl - ', l, h)
+            ms = contact[l][:len(search)]
+            if ms == search : return l
+            elif l+1 < len(contact) and contact[l+1][:len(search)] == search : return l+1
+            # elif 
+            return len(contact)
+        def hl(search, l, h) : 
+            if h < l : return h
+            while l < h : 
+                m = (l+h)//2
+                ms = contact[m][:len(search)]
+                if ms < search : l = m + 1
+                elif ms > search : h = m - 1
+                else : l = m+1
+            # print('hl - ', l, h)
+            ms = contact[h][:len(search)]
+            if ms == search : return h
+            elif h-1 > -1 and contact[h-1][:len(search)] == search : return h-1
+            return -1
+        contact = list(set(contact))
+        contact.sort()
+        # print(contact)
+        search = ''
+        res = []
+        l, h = 0, len(contact)-1
+        for a in s : 
+            search += a
+            l = bl(search, l, h)
+            h = hl(search, l, h)
+            # print(l,h)
+            if h < l : res.append(['0'])
+            else : res.append(contact[l: h+1])
+            
+        return res
+
+
+#{ 
+ # Driver Code Starts
+#Initial Template for Python 3
+
+if __name__ == '__main__':
+    t = int(input())
+    for _ in range(t):
+        n = int(input())
+        contact = input().split()
+        s = input()
+        
+        ob = Solution()
+        ans = ob.displayContacts(n, contact, s)
+        for i in range(len(s)):
+            for val in ans[i]:
+                print(val, end = " ")
+            print()
+        print("~")
+# } Driver Code Ends
+
+#Count ways to nth stair
+class Solution:
+    def waysToReachStair(self, k: int) -> int:
+        def sm(c = 1, i = 0, back=True) :
+            print(c,i)
+            if c > k +1 : return 0
+            res = sm(c+(2**i), i + 1, True)
+            if back : res += sm(c-1, i, False)
+            if c == k : res += 1
+            return res
+        def com(n, r) :
+            den = 1
+            num = 1
+            # print(n, r)
+            for i in range(2, n+1) :
+                num*= i
+                if i == r : 
+                    den*= num
+                if i == n-r :
+                    den*= num
+            # print(num, den)
+            return num/den
+
+        if k < 5 : return sm()
+        for i in range(30) : 
+            if k == 2**i : return 1
+            if k < 2**i : 
+                # print(i, k)
+                k = 2**i - k
+                # print(k)
+                if k > i+1 : return 0
+                else : return int(com(i+1, k))
+        return 0
+
+#Nuts and bolts problem
+class Solution:
+    def waysToReachStair(self, k: int) -> int:
+        def sm(c = 1, i = 0, back=True) :
+            print(c,i)
+            if c > k +1 : return 0
+            res = sm(c+(2**i), i + 1, True)
+            if back : res += sm(c-1, i, False)
+            if c == k : res += 1
+            return res
+        def com(n, r) :
+            den = 1
+            num = 1
+            # print(n, r)
+            for i in range(2, n+1) :
+                num*= i
+                if i == r : 
+                    den*= num
+                if i == n-r :
+                    den*= num
+            # print(num, den)
+            return num/den
+
+        if k < 5 : return sm()
+        for i in range(30) : 
+            if k == 2**i : return 1
+            if k < 2**i : 
+                # print(i, k)
+                k = 2**i - k
+                # print(k)
+                if k > i+1 : return 0
+                else : return int(com(i+1, k))
+        return 0
+
+#column name from col number
+class Solution:
+    def convertToTitle(self, n: int) -> str:
+        m="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        res=""
+        while n:
+            n=n-1
+            res=m[n%26]+res
+            n=n//26
+        return res    
