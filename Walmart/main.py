@@ -124,3 +124,35 @@ class Solution:
             fallacies.append(s)
             return False
         return wb(s)
+
+#Top k Frequent Words
+class Solution:
+    def topKFrequent(self, words: List[str], k: int) -> List[str]:
+        c = Counter(words)
+        for ki in c : 
+            c[ki] = [-c[ki], ki]
+        words = list(c.keys())
+        words.sort(key = lambda x : c[x])
+        return words[:k]
+    
+#Sort Characters by Frequency 
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        s = list(s)
+        # print(s)
+        c = Counter(s)
+        # print(c)
+        s = list(set(s))
+        s.sort(key = lambda x : c[x], reverse = True)
+        res = ''
+        for i in s : 
+            res += i*c[i]
+        return res
+
+#Friends Of Appropriate Ages
+class Solution:
+    def numFriendRequests(self, ages):
+        def request(x, y):
+            return not (y <= 0.5 * x + 7 or y > x or y > 100 and x < 100)
+        c = Counter(ages)
+        return sum(request(a, b) * c[a] * (c[b] - (a == b)) for a in c for b in c)
