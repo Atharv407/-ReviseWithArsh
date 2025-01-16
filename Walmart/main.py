@@ -243,3 +243,14 @@ class Solution:
                 count[chk[n]] += 1
         return sum(count.values()) % (10 ** 9 + 7)
         
+#Extra Characters in a String
+class Solution:
+    def minExtraChar(self, s: str, dictionary: List[str]) -> int:
+        n = len(s)
+        dp = [n] * (n+1)
+        for i in range(1,n+1):
+            for w in dictionary:
+                if i >= len(w) and s[i - len(w):i] == w:
+                    dp[i] = min(dp[i], dp[i-len(w)]-len(w))
+            dp[i] = min(dp[i],dp[i-1])
+        return dp[n]
