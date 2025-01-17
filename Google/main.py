@@ -104,3 +104,53 @@ class Solution:
             res = (res*nums[i])%mod
         return res % mod
             
+#Merge K sorted lists
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        l = len(lists)
+        i = 0
+        while i < l :
+            if lists[i] == None :
+                lists.pop(i)
+                l-= 1
+            else :
+                i += 1
+        
+        # print(lists)
+        if l == 0 :
+            return None
+        elif l == 1 :
+            return lists[0]
+        def minn(arr, l) -> ListNode :
+            m = 0
+            for i in range(0, l) :
+                if arr[i].val < arr[m].val :
+                    m = i
+            return m
+        i = minn(lists, l)
+        head = ListNode(lists[i].val, None)
+        node = head
+        if lists[i].next == None :
+                lists.pop(i)
+                l = l -1
+        else :
+            lists[i] = lists[i].next
+        while l > 0 :
+            i = minn(lists, l)
+            # print(i, lists, "\n\n")
+            n = ListNode(lists[i].val, None)
+            node.next = n
+            node = node.next
+            if lists[i].next == None :
+                lists.pop(i)
+                l = l -1
+            else :
+                lists[i] = lists[i].next
+        return head   
+
+        
