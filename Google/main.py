@@ -47,3 +47,60 @@ class Solution:
                 ans = i
             # print(curr)
         return ans
+
+#Query Kth Smallest Trimmed Number
+class Solution:
+    def smallestTrimmedNumbers(self, nums: List[str], q: List[List[int]]) -> List[int]:
+        nums = list(enumerate(nums))
+        l = len(nums[0][1])
+        dp = {}
+        for i in range(len(q)) :
+            k, trim = q[i]
+            if not trim in dp :
+                dp[trim] = list(range(len(nums)))
+                dp[trim].sort(key = lambda x : [nums[x][1][l-trim:], nums[x][0]])
+                #  = nnums
+            q[i] = dp[trim][k-1]
+        # print(dp)
+        return q
+    
+#Stone Game VI
+class Solution:
+    def stoneGameVI(self, a: List[int], b: List[int]) -> int:
+        values = [a[i] + b[i] for i in range(len(a))]
+        # values = list(enumerate(values))
+        va.sort(reverse = True, key = lambda x : x[1])
+
+        ass = sum([a[values[i][0]] for i in range(0, len(values), 2)])
+        bss = sum([b[values[i][0]] for i in range(1, len(values), 2)])
+        
+        if ass > bss : return 1
+        elif ass < bss : return -1
+        return 0
+
+#Maximum Product After K Increments
+class Solution:
+    def maximumProduct(self, nums: List[int], k: int) -> int:
+        j = 1
+        nums.sort()
+        mv = nums[0]
+        # print(nums)
+        res = 0
+        # mj = j
+        while True :
+            while j< len(nums) and nums[j] <= mv :
+                j += 1
+            if k < j : break
+            mv += 1
+            k -= j
+
+        mod = (10**9 + 7)
+        res = 1
+        for i in range(k) :
+            res = (res*(mv+1))%mod
+        for i in range(k,j) :
+            res = (res*mv)%mod
+        for i in range(j, len(nums)) : 
+            res = (res*nums[i])%mod
+        return res % mod
+            
