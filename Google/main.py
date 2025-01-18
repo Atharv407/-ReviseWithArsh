@@ -153,4 +153,111 @@ class Solution:
                 lists[i] = lists[i].next
         return head   
 
+#Number of Good Leaf Nodes Pairs
+class Solution:
+    def countPairs(self, root: Optional[TreeNode], distance: int) -> int:
+        self.res = 0
+        def func(n) :
+            if not n : return []
+
+            if not n.left and not n.right :
+                return [1]
+
+            l = func(n.left)
+            r = func(n.right)
+            for i in range(len(l)) :
+                for j in range(len(r)) :
+                    if l[i] + r[j] <= distance :self.res += 1
+            r = [i +1 for i in r + l if i < distance]
+            # l = [i +1 for i in l if i < distance]
+            return r
+        # res = 0
+        func(root)
+        return self.res
+
+#Design Add and Search Words Data Structure
+class WordDictionary:
+
+    def __init__(self):
+        self.root = {}
         
+
+    def addWord(self, word: str) -> None:
+        curr = self.root
+        for i in word :
+            if i not in curr :
+                curr[i] = {}
+            curr = curr[i]
+        curr['end'] = {}
+
+    def search(self, word: str, start = None) -> bool:
+        if start == None :
+            start = self.root
+        curr = start
+        for i in range(len(word)) :
+            if word[i] == '.' :
+                for j in curr :
+                    if self.search(word[i+1:], curr[j]) :
+                        return True
+                return False
+            if word[i] not in curr :
+                return False
+            curr = curr[word[i]]
+        # print(curr, 'end' in curr)
+        return "end" in curr 
+
+
+#Integer to English Words
+class Solution:
+    def numberToWords(self, num: int) -> str:
+        if num == 0 :
+            return 'Zero'
+        dic = 'Zero One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen'.split(' ')
+        dic2 = 'a b Twenty Thirty Forty Fifty Sixty Seventy Eighty Ninety'.split(' ')
+        dic3 = ',Thousand,Million,Billion'.split(',')
+        def con(np : int) :
+            nnp = np%100
+            np = int((np-nnp)/100)
+            res = []
+            if np > 0 :
+                res.append(dic[np]) 
+                res.append('Hundred') 
+            if nnp >= len(dic) :
+                # print(nnp)
+                nnnp = nnp%10 
+                nnp = int((nnp-nnnp)/10)
+                print(np, nnp, nnnp)
+                res.append(dic2[nnp]) 
+                if nnnp > 0 :
+                    res.append(dic[nnnp]) 
+            elif nnp > 0 :
+                res.append(dic[nnp]) 
+            return res
+        res = []
+        k = 0
+        while num > 0 :
+            curr = con(num%1000) 
+            if k > 0 and curr:
+                curr.append(dic3[k%4])
+            res = curr + res
+            k += 1
+            num = int((num - num%1000)/1000)
+
+        return ' '.join(res)
+
+#Sum of Scores of Built Strings
+class Solution:
+    def sumScores(self, s):
+        def func(s):
+            z = [0] * len(s)
+            l, r = 0, 0
+            for i in range(1, len(s)):
+                if i <= r:
+                    z[i] = min(r - i + 1, z[i - l])
+                while i + z[i] < len(s) and s[z[i]] == s[i + z[i]]:
+                    z[i] += 1
+                if i + z[i] - 1 > r:
+                    l, r = i, i + z[i] - 1
+            return z
+        
+        return sum(func(s)) + len(s)
