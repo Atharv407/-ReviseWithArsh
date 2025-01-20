@@ -261,3 +261,38 @@ class Solution:
             return z
         
         return sum(func(s)) + len(s)
+    
+#Count Subtrees With Max Distance Between Cities
+class Solution:
+    def countSubgraphsForEachDiameter(self, n: int, edges: List[List[int]]) -> List[int]:
+        res = [0]*(n-1)
+        g = defaultdict(list)
+        gs = [0]*n
+        dp = [0]*(1<<n)
+        for a, b in edges:
+            a -= 1
+            b -= 1
+            g[a].append(b)
+            g[b].append(a)
+            gs[a] |= (1<<b)
+            gs[b] |= (1<<a)
+            dp[(1<<a)|(1<<b)] = 1
+        dis = [[0]*n for _ in range(n)]
+        def dfs(r, c, l, pt):
+            dis[r][c] = l
+            for n in g[c]:
+                if n == pt:
+                    continue
+                dfs(r, n, l+1, c)
+            return
+
+        for i in range(n):
+            dfs(i,i,0,-1)
+
+        for state in range(1<<n):
+            if dp[state] > 0:
+                res[dp[state]-1] += 1
+                for i in range(n):
+                    if dp[state | (1<<i)] == 0 and (state & gs[i]):
+                        dp[state | (1<<i)] = max(dp[state], max(dis[i][j] for j in range(n) if state&(1<<j)))
+        return res

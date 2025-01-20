@@ -254,3 +254,82 @@ class Solution:
                     dp[i] = min(dp[i], dp[i-len(w)]-len(w))
             dp[i] = min(dp[i],dp[i-1])
         return dp[n]
+    
+#Throne Inheritance
+# class Node :
+#     def __init__(self, name,) :
+#         self.name = name
+#         self.children = []
+
+class ThroneInheritance:
+
+    def __init__(self, kingName: str):
+        # self.curOrder = {kingName}
+        self.king = kingName
+        self.dead = set()
+        self.nodes = {kingName : []}
+
+    def birth(self, parentName: str, childName: str) -> None:
+        # p = self.find(parentName, self.king)
+        self.nodes[childName] = []
+        self.nodes[parentName].insert(0, childName)
+
+    def death(self, name: str) -> None:
+        n = self.dead.add(name)
+
+    def getInheritanceOrder(self) -> List[str]:
+        stk = [self.king]
+        res = []
+        while stk :
+            n = stk.pop()
+            if n not in self.dead : res.append(n)
+            stk += self.nodes[n]
+        return res
+    
+#Find in Mountain Array
+# """
+# This is MountainArray's API interface.
+# You should not implement it, or speculate about its implementation
+# """
+#class MountainArray:
+#    def get(self, index: int) -> int:
+#    def length(self) -> int:
+
+class Solution:
+    def findInMountainArray(self, target: int, arr: 'MountainArray') -> int:
+        i, j = 0, arr.length()-1
+        p = i
+        while i <= j :
+            m = (i+j)//2
+            if m-1 > - 1 and arr.get(m-1) > arr.get(m) :
+                j = m-1
+            elif  m+1 < arr.length() and arr.get(m+1) > arr.get(m) :
+                i = m+1
+            else : 
+                p = m
+                break
+            p = i
+
+        # p = peak()
+        if arr.get(p) == target : return p
+
+        i = 0
+        j = p - 1
+        while i <= j :
+            m = (i+j)//2
+            if arr.get(m) > target :
+                j = m - 1
+            elif arr.get(m) < target :
+                i = m + 1
+            else : return m
+
+        i = p+1
+        j = arr.length()-1
+        while i <= j :
+            m = (i+j)//2
+            if arr.get(m) > target :
+                i = m + 1
+            elif arr.get(m) < target :
+                j = m - 1
+            else : return m
+        return -1
