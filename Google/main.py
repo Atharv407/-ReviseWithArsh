@@ -296,3 +296,4 @@ class Solution:
                     if dp[state | (1<<i)] == 0 and (state & gs[i]):
                         dp[state | (1<<i)] = max(dp[state], max(dis[i][j] for j in range(n) if state&(1<<j)))
         return res
+    
