@@ -177,3 +177,24 @@ class Solution:
             
         return res
     
+#Count Collisions on a Road
+class Solution:
+    def countCollisions(self, dire: str) -> int:
+        return len(dire.lstrip('L').rstrip('R')) - dire.count('S')
+                
+
+#Length of Longest Subarray With at Most K Frequency
+class Solution:
+    def maxSubarrayLength(self, nums: List[int], k: int) -> int:
+        count = defaultdict(int)
+        i = 0
+        res = 0
+        for j in range(len(nums)) :
+            while count[nums[j]] == k :
+                res = j-i if j-i > res else res
+                count[nums[i]] -= 1
+                i += 1
+            count[nums[j]] += 1
+        res = j-i+1 if len(nums) - i> res else res
+            
+        return res

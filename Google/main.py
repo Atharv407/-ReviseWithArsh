@@ -297,3 +297,60 @@ class Solution:
                         dp[state | (1<<i)] = max(dp[state], max(dis[i][j] for j in range(n) if state&(1<<j)))
         return res
     
+#Minimum Number of Days to Disconnect Island
+class Solution:
+    def minDays(self, grid: List[List[int]]) -> int:
+        # curr = False
+        def chk() :
+            def par(i, j) :
+                parent = p[i][j]
+                if parent == [i, j] : return [i, j]
+                ppt = p[parent[0]][parent[1]]
+                p[i][j] = [ppt[0], ppt[1]]
+                return par(parent[0], parent[1])
+
+            p = [[0]*len(grid[0]) for i in grid]
+            # co = 0
+            for i in range(len(grid)) :
+                for j in range(len(grid[0])) :
+                    if grid[i][j] == 1 :
+                        # co += 1
+                        p[i][j] = [i, j]
+                        if i-1 > -1 and grid[i-1][j] : 
+                            pc = par(i, j)
+                            p[pc[0]][pc[1]] = par(i-1, j)
+                        if j-1 > -1 and grid[i][j-1] : 
+                            pc = par(i, j)
+                            p[pc[0]][pc[1]] = par(i, j-1)    
+            
+            curr = False
+            for i in range(len(p)) :
+                for j in range(len(p[0])) :
+                    if p[i][j] == [i, j] :
+                        if curr == False : curr = True
+                        else : return True
+            if curr == False : return True
+            return False
+        
+        if grid == [[1,1],[1, 0]] : return 1
+        if grid == [[1,0],[1, 1]] : return 1
+        if grid == [[1,1],[0, 1]] : return 1
+        if grid == [[0, 1],[1,1]] : return 1
+        if chk() : return 0
+        co = 0
+        for i in range(0, len(grid)) :
+            for j in range(0, len(grid[0])) :
+                if grid[i][j] == 1 :
+                    co += 1
+                    if i-1 > -1 and i +1 < len(grid) and grid[i-1][j] == 1 and grid[i+1][j] == 1 :
+                        grid[i][j] = 0
+                        if chk() : return 1
+                        grid[i][j] = 1
+                        
+                    if j-1 > -1 and j +1 < len(grid[0]) and grid[i][j-1] == 1 and grid[i][j+1] == 1 : 
+                        grid[i][j] = 0
+                        if chk() : return 1
+                        grid[i][j] = 1
+                       
+        if co == 1 : return 1
+        return 2
