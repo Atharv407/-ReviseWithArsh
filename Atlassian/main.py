@@ -198,3 +198,39 @@ class Solution:
         res = j-i+1 if len(nums) - i> res else res
             
         return res
+
+#Minimum Non-Zero Product of the Array Elements
+class Solution:
+    def minNonZeroProduct(self, p: int) -> int:
+        mod = 10**9 + 7
+        pval = pow(2, p)
+        maxm = pval - 1
+        num = int(pval/2)
+        res = pow(maxm-1, num-1, mod)
+        return (res*maxm)%mod
+    
+#Maximize Area of Square Hole in Grid
+class Solution:
+    def maximizeSquareHoleArea(self, n: int, m: int, hbars: List[int], vbars: List[int]) -> int:
+        hbars.sort()
+        vbars.sort()
+        mh, mv = 1, 1
+
+        i, j = 0, 1
+        while j < len(hbars) :
+            if hbars[j] != hbars[j-1] + 1 :
+                mh = max(mh, j-i) 
+                i = j
+            j += 1
+        mh = max(mh, j-i) 
+
+        i, j = 0, 1
+        while j < len(vbars) :
+            if vbars[j] != vbars[j-1] + 1 :
+                mv = max(mv, j-i) 
+                i = j
+            j = j + 1
+        mv = max(mv, j-i) 
+
+        return (min(mh, mv) + 1)**2
+    
