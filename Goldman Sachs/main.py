@@ -111,3 +111,75 @@ class Solution:
 
         return h
 
+
+#Flip Matrix
+class Solution:
+
+    def __init__(self, m: int, n: int):
+        self.mat = defaultdict(list)
+        self.m = m
+        self.n = n
+        self.mweights = [n]*m
+        self.r = list(range(self.m))
+        self.curr = [0, 0]
+        
+
+    def flip(self) -> List[int]:
+        i = random.choices(self.r, weights = self.mweights, k = 1)[0]
+        jst = self.curr[1] if i == self.curr[0] else 0
+        j = random.randint(jst, self.n-1)
+        
+        res = [i, j] if not (i, j) in self.mat else self.mat[(i, j)]
+
+        burned = [self.curr[0], self.curr[1]] 
+        if (self.curr[0], self.curr[1]) in self.mat :
+            burned =  self.mat[(self.curr[0], self.curr[1])]
+
+        self.mat[(i, j)] = burned[:]
+        self.mweights[self.curr[0]] -= 1
+
+        if self.curr[1] == self.n-1 :
+            self.curr = [self.curr[0] + 1, 0]
+        else :
+            self.curr[1] += 1
+
+        return res
+    
+    def reset(self) -> None:
+        self.mat = defaultdict(list)
+        self.mweights = [self.n for i in range(self.m)]
+        self.curr = [0, 0]
+
+
+#Combinations in a Phone Number
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        let = [['a', 'b', 'c'], ['d', 'e', 'f'], ['g', 'h', 'i'], ['j', 'k', 'l'], ['m', 'n', 'o'], ['p', 'q', 'r', 's'], ['t', 'u', 'v'], ['w', 'x', 'y', 'z']] 
+        res = ['']
+        if not digits : return []
+        for i in digits :
+            nres = []
+            for l in let[int(i)-2] :
+                for w in res :
+                    nres.append(w + l)
+
+            res = nres
+
+        return res
+
+
+#Find Consecutive Integers from a Data Stream
+class DataStream:
+
+    def __init__(self, value: int, k: int):
+        self.value, self.k, self.ck = value, k, 0
+        
+
+    def consec(self, num: int) -> bool:
+        if num == self.value : 
+            self.ck += 1
+            return self.ck >= self.k 
+        else :
+            self.ck = 0
+        return False
+        
