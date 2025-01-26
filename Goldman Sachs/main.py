@@ -183,3 +183,76 @@ class DataStream:
             self.ck = 0
         return False
         
+#K - divisible Elements Subarrays
+class Solution:
+    def countDistinct(self, nums: List[int], k: int, p: int) -> int:
+        res = set()
+        for i in range(len(nums)) :
+            curr = ''
+            ki = 0
+            for j in range(i, len(nums)) :
+                if nums[j] %p == 0 :
+                    if ki == k :
+                        break
+                    else :
+                        ki += 1
+                        curr += ' ' + str(nums[j])
+                        res.add(curr)
+                else :
+                    curr += ' ' + str(nums[j])
+                    res.add(curr)
+        # print(res)
+        return len(res)
+
+#Number of People Aware of a Secret
+class Solution:
+    def peopleAwareOfSecret(self, n: int, delay: int, forget: int) -> int:
+        dn = [0 for i in range(delay + 1)]
+        fn = [0 for i in range(forget )]
+        dn[-1] = 1
+        fn[-1] = 1
+        mod = (10**9 + 7)
+        for i in range(n-1) :
+            dn[0] -= fn[0]
+            fn[0] = 0
+            fn = fn[1:] + fn[:1]
+            fn[-1] = (dn[0] + dn[1])%mod
+            dn = dn[1:] + dn[:1]
+            dn[-1] += dn[0]%mod
+            dn[0] = dn[-1]%mod
+        s = 0 
+        for i in dn : 
+            s = (s + i)%mod
+        return s
+            
+        
+#Map of Highest Peak
+class Solution:
+    def highestPeak(self, height: List[List[int]]) -> List[List[int]]:
+        # height = isWater
+        q = deque()
+        for i in range(len(height)) :
+            for j in range(len(height[0])) :
+                if height[i][j] == 1 :
+                    q.append([i,j,0])
+                    height[i][j] = 0
+                else :
+                    height[i][j] = None
+        res = 0
+        while q :
+            # print(q)
+            i, j, h = q.popleft()
+            if i -1 > -1 and height[i-1][j] == None :
+                height[i-1][j] = h + 1
+                q.append([i-1, j, h+1])
+            if j+1 < len(height[0]) and height[i][j+1] == None :
+                height[i][j+1] = h + 1
+                q.append([i, j+1, h+1])
+            if j-1 > -1 and height[i][j-1] == None :
+                height[i][j-1] = h + 1
+                q.append([i, j-1, h+1])
+            if i +1 < len(height) and height[i+1][j] == None :
+                height[i+1][j] = h + 1
+                q.append([i+1, j, h+1])
+        return height
+        
