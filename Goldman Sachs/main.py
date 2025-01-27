@@ -255,4 +255,68 @@ class Solution:
                 height[i+1][j] = h + 1
                 q.append([i+1, j, h+1])
         return height
-        
+
+
+#Run Length Encoding
+class Solution:
+    def encode(self, s : str) -> str:
+        # code here
+        p = s[0]
+        c = 1
+        res = ''
+        for i in range(1, len(s)) :
+            if s[i] == p:
+                c += 1
+            else :
+                res += p + str(c)
+                p = s[i]
+                c = 1
+        res += p + str(c)
+        return res
+
+#Find Missing And Repeating
+class Solution:
+    def findTwoElement( self,arr): 
+        res = [0,0]
+        s = set(range(1, len(arr)+1))
+        for i in arr :
+            if i in s :
+                s.remove(i)
+            else :
+                res[0] = i
+        res[1] = list(s)[0]
+        return res
+
+
+#Following a number pattern
+class Solution:
+    def printMinNumberForPattern(ob,s):
+        def nex(i) :
+            while i not in avail :
+                i += 1
+            avail.remove(i)
+            return str(i)
+        avail = {1,2,3,4,5,6,7,8,9}
+        i = 0
+        j = 1
+        res = ''
+        while i < len(s) :
+            nres = nex(j)
+            while i < len(s) and s[i] == 'D':
+                nres += nex(j)
+                j += 1
+                i += 1
+            res += nres[::-1]
+            j += 1
+            i += 1
+        if s[-1] == 'I' :
+            res += nex(j)
+        return res
+
+# Ways to reach a position after k steps
+class Solution:
+    def numberOfWays(self, startPos: int, endPos: int, k: int) -> int:
+        if (startPos - endPos - k) % 2 == 1 :
+            return 0
+        else :
+            return comb(k, (endPos - startPos + k)//2) % (10 ** 9 + 7)
